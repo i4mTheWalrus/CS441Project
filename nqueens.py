@@ -139,18 +139,20 @@ class Board():
         else:
             return space
 
+
 if __name__ == "__main__":
     board = Board(n)
+    record = []
     print('----------------Starting board--------------------------')
     possible_moves = board.get_possible_moves()
+    record.append(possible_moves)
     start = np.random.choice(possible_moves)
-    while(start==0 or start==3):
-        start = np.random.choice(possible_moves)
     board.place_queen(start)
     board.print_constraints(False)
     print('--------------------------------------------------------')
 
     while(True):
+
         if board.solution_found():
             print('SOLUTION FOUND!!!!!!!')
             print(board.print_constraints(False))
@@ -165,6 +167,17 @@ if __name__ == "__main__":
             # Randomly pick
             # No backtrack logic yet
         print('-------------------- {} ---------------------------------'.format(len(board.queens)))
+        possible_moves = board.get_possible_moves()
+
+        if(len(possible_moves)==0):
+            board.constraints = np.zeros((n,n), dtype=int)
+            board.queens = []
+            print('----------------Restarting board--------------------------')
+            possible_moves = board.get_possible_moves()
+            start = np.random.choice(possible_moves)
+            board.place_queen(start)
+            board.print_constraints(False)
+            print('--------------------------------------------------------')
         possible_moves = board.get_possible_moves()
         print('possible moves: {}'.format(possible_moves))
         move = np.random.choice(possible_moves)
