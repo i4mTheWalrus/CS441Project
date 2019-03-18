@@ -143,6 +143,7 @@ class Board():
 if __name__ == "__main__":
     board = Board(n)
     record = []
+    iteration = 1
     print('----------------Starting board--------------------------')
     possible_moves = board.get_possible_moves()
     record.append(possible_moves)
@@ -152,11 +153,12 @@ if __name__ == "__main__":
     print('--------------------------------------------------------')
 
     while(True):
-
         if board.solution_found():
             print('SOLUTION FOUND!!!!!!!')
             print(board.print_constraints(False))
             print(board.queens)
+            print("interation:")
+            print(iteration)
             #for i in reversed(board.queens):
             #    board.remove_queen(i)
             #    board.print_constraints()
@@ -180,6 +182,7 @@ if __name__ == "__main__":
                         to_delete = i
                         break
                 record[-1] = np.delete(record[-1], to_delete)
+                iteration+=1
                 board.remove_queen(board.queens[-1])
                 #record[-1] = record[-1][:-1]
             while(len(record[-1])==0):
@@ -191,6 +194,7 @@ if __name__ == "__main__":
                             to_delete = i
                             break
                     record[-1] = np.delete(record[-1], to_delete)
+                    iteration+=1
                     board.remove_queen(board.queens[-1])
 
         if(len(record)==1):
@@ -210,5 +214,6 @@ if __name__ == "__main__":
         #move = record[-1][-1]
         print('picked: {}'.format(move))
         board.place_queen(move)
+        iteration+=1
         board.print_constraints()
         print('--------------------------------------------------------')
