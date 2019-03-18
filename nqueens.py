@@ -144,6 +144,8 @@ if __name__ == "__main__":
     print('----------------Starting board--------------------------')
     possible_moves = board.get_possible_moves()
     start = np.random.choice(possible_moves)
+    while(start==0 or start==3):
+        start = np.random.choice(possible_moves)
     board.place_queen(start)
     board.print_constraints(False)
     print('--------------------------------------------------------')
@@ -153,10 +155,10 @@ if __name__ == "__main__":
             print('SOLUTION FOUND!!!!!!!')
             print(board.print_constraints(False))
             print(board.queens)
-            for i in reversed(board.queens):
-                board.remove_queen(i)
-                board.print_constraints()
-                time.sleep(1)
+            #for i in reversed(board.queens):
+            #    board.remove_queen(i)
+            #    board.print_constraints()
+            #    time.sleep(1)
             break
         # For each column:
             # Get array of indices of zeros
