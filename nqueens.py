@@ -1,7 +1,6 @@
 import numpy as np
 from timeit import default_timer as timer
 import time
-np.set_printoptions(linewidth= 150, formatter=None)
 
 n = 4
 
@@ -42,21 +41,39 @@ class Board():
         self.constraints[:,col] += 1
 
         # Increment diagonally
+        #Left up
+        if(col > 0 and row > 0):
+            new_row = row-1
+            new_col = col-1
+            while(new_row >= 0 and new_col >= 0):
+                self.constraints[new_row, new_col] += 1
+                new_row -=1
+                new_col -=1
+        #Right up
+        if (col < self.n-1 and row > 0):
+            new_row = row - 1
+            new_col = col + 1
+            while (new_row >= 0 and new_col <= self.n-1):
+                self.constraints[new_row, new_col] += 1
+                new_row -= 1
+                new_col += 1
+        # Left down
+        if (col > 0 and row < self.n-1):
+            new_row = row + 1
+            new_col = col - 1
+            while (new_row <= self.n-1 and new_col >= 0):
+                self.constraints[new_row, new_col] += 1
+                new_row += 1
+                new_col -= 1
+        # Right down
+        if (col < self.n - 1 and row < self.n-1):
+            new_row = row + 1
+            new_col = col + 1
+            while (new_row <= self.n-1 and new_col <= self.n-1):
+                self.constraints[new_row, new_col] += 1
+                new_row += 1
+                new_col += 1
 
-        rd_start = row + col
-        ld_start = row - col
-
-        # Flatten to 1D array
-        self.constraints = np.ravel(self.constraints)
-        for i in range(self.n):
-            if rd_start > -1:
-                self.constraints[self.rcToSpace(rd_start, i)] += 1
-                rd_start -=1
-            if ld_start < self.n:
-                self.constraints[self.rcToSpace(ld_start, i)] += 1
-                ld_start += 1
-        # Change back to 2D array
-        self.constraints = self.constraints.reshape(n,n)
 
     def remove_constraints(self, row):
         # This is basically the same as add_constraints except it does -= 1
@@ -68,19 +85,39 @@ class Board():
         self.constraints[:, col] -= 1
         # Increment diagonally
 
-        rd_start = row + col
-        ld_start = row - col
-
-        self.constraints = np.ravel(self.constraints)
-        for i in range(self.n):
-            if rd_start > -1:
-                self.constraints[self.rcToSpace(rd_start, i)] -= 1
-                rd_start -= 1
-            if ld_start < self.n:
-                self.constraints[self.rcToSpace(ld_start, i)] -= 1
-                ld_start += 1
-
-        self.constraints = self.constraints.reshape(n, n)
+        # Increment diagonally
+        #Left up
+        if(col > 0 and row > 0):
+            new_row = row-1
+            new_col = col-1
+            while(new_row >= 0 and new_col >= 0):
+                self.constraints[new_row, new_col] -= 1
+                new_row -=1
+                new_col -=1
+        #Right up
+        if (col < self.n-1 and row > 0):
+            new_row = row - 1
+            new_col = col + 1
+            while (new_row >= 0 and new_col <= self.n-1):
+                self.constraints[new_row, new_col] -= 1
+                new_row -= 1
+                new_col += 1
+        # Left down
+        if (col > 0 and row < self.n-1):
+            new_row = row + 1
+            new_col = col - 1
+            while (new_row <= self.n-1 and new_col >= 0):
+                self.constraints[new_row, new_col] -= 1
+                new_row += 1
+                new_col -= 1
+        # Right down
+        if (col < self.n - 1 and row < self.n-1):
+            new_row = row + 1
+            new_col = col + 1
+            while (new_row <= self.n-1 and new_col <= self.n-1):
+                self.constraints[new_row, new_col] -= 1
+                new_row += 1
+                new_col += 1
 
     def solution_found(self):
         return True if len(self.queens) == n else False
