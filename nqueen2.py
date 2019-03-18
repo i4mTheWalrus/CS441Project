@@ -40,7 +40,7 @@ class Board():
         self.constraints[row] += 1
         # Increment column
         self.constraints[:,col] += 1
-        self.constraints[row, col] = 0
+        self.constraints[row, col] = 200
 
         # Increment diagonally
         #Left up
@@ -172,14 +172,26 @@ if __name__ == "__main__":
         record.append(possible_moves)
 
         if(len(record[-1])==0):
-            board.remove_queen(board.queens[-1])
             record.pop()
             if(len(record)!=0):
-                record[-1] = record[-1][:-1]
+                #board.remove_queen(board.queens[-1])
+                for i in range(len(record[-1])):
+                    if record[-1][i] == board.queens[-1]:
+                        to_delete = i
+                        break
+                record[-1] = np.delete(record[-1], to_delete)
+                board.remove_queen(board.queens[-1])
+                #record[-1] = record[-1][:-1]
             while(len(record[-1])==0):
                 record.pop()
                 if (len(record) != 0):
-                    record[-1] = record[-1][:-1]
+                    #record[-1] = record[-1][:-1]
+                    for i in range(len(record[-1])):
+                        if record[-1][i] == board.queens[-1]:
+                            to_delete = i
+                            break
+                    record[-1] = np.delete(record[-1], to_delete)
+                    board.remove_queen(board.queens[-1])
 
         if(len(record)==1):
             board = Board(n)
@@ -193,7 +205,9 @@ if __name__ == "__main__":
             print('--------------------------------------------------------')
             continue
         print(record)
-        move = record[-1][-1]
+        print(board.queens)
+        move = np.random.choice(record[-1])
+        #move = record[-1][-1]
         print('picked: {}'.format(move))
         board.place_queen(move)
         board.print_constraints()
