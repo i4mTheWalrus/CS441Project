@@ -1,6 +1,7 @@
 import numpy as np
 from timeit import default_timer as timer
 import time
+np.set_printoptions(linewidth= 150, formatter=None)
 
 n = 4
 
@@ -39,6 +40,7 @@ class Board():
         self.constraints[row] += 1
         # Increment column
         self.constraints[:,col] += 1
+        self.constraints[row, col] = 0
 
         # Increment diagonally
         #Left up
@@ -74,15 +76,16 @@ class Board():
                 new_row += 1
                 new_col += 1
 
-
     def remove_constraints(self, row):
         # This is basically the same as add_constraints except it does -= 1
 
-        col = len(self.queens) - 1
+        col = len(self.queens)
+        print('removing queen {}:'.format(col))
         # Increment row
         self.constraints[row] -= 1
         # Increment column
         self.constraints[:, col] -= 1
+        self.constraints[row, col] = 0
         # Increment diagonally
 
         # Increment diagonally
@@ -142,13 +145,18 @@ if __name__ == "__main__":
     possible_moves = board.get_possible_moves()
     start = np.random.choice(possible_moves)
     board.place_queen(start)
-    board.print_constraints(True)
+    board.print_constraints(False)
     print('--------------------------------------------------------')
 
     while(True):
         if board.solution_found():
             print('SOLUTION FOUND!!!!!!!')
-            print(board.print_constraints(True))
+            print(board.print_constraints(False))
+            print(board.queens)
+            for i in reversed(board.queens):
+                board.remove_queen(i)
+                board.print_constraints()
+                time.sleep(1)
             break
         # For each column:
             # Get array of indices of zeros
@@ -160,6 +168,6 @@ if __name__ == "__main__":
         move = np.random.choice(possible_moves)
         print('picked: {}'.format(move))
         board.place_queen(move)
-        board.print_constraints(True)
+        board.print_constraints()
         print('--------------------------------------------------------')
-        time.sleep(1)
+
