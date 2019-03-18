@@ -5,12 +5,22 @@ np.set_printoptions(linewidth= 150, formatter=None)
 
 n = 4
 
+
+class Square:
+    def __init__(self, state):
+        self.state = state
+    def update_square(self, new_state):
+        if(self.state != -1):#it's not a queen
+            self.state += new_state
+
+
 class Board():
     def __init__(self, n):
         self.n = n
         self.board_size = n * n
         # Board with numbers representing # of attacks on each tile
-        self.constraints = np.zeros((n,n), dtype=int)
+        #self.constraints = np.zeros((n,n), dtype=int)
+        self.constraints = np.zeros((n,n), Square)
         # List to hold Queen position for each column
         self.queens = []
 
